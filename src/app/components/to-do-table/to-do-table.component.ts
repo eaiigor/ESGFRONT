@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Tarefa, TarefaService } from 'src/app/services/tarefa.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class ToDoTableComponent {
   newTaskForm: FormGroup;
   editTaskForm: FormGroup;
 
-  constructor(private tarefaService: TarefaService, private fb: FormBuilder) {
+  constructor(private tarefaService: TarefaService, private fb: FormBuilder, private toastr: ToastrService) {
     this.newTaskForm = this.fb.group({
       titulo: ['', Validators.required],
       descricao: ['', Validators.required],
@@ -72,10 +73,12 @@ export class ToDoTableComponent {
   }
 
   onSaveNewTask(): void {
+    debugger
     if (this.newTaskForm.valid) {
       const newTask: Tarefa = this.newTaskForm.value;
       this.tarefaService.addTarefa(newTask).subscribe((tarefa) => {
         this.tarefas.push(tarefa);
+        this.toastr.success('Tarefa criada com sucesso!');
         this.isAddingTask = false;
         this.newTaskForm.reset({
           titulo: '',
@@ -106,6 +109,8 @@ export class ToDoTableComponent {
         this.editTask = false;
         this.editIndex = null;
       });
+
+     this.toastr.success('Tarefa atualizada com sucesso!');
     }
   }
 
@@ -119,6 +124,8 @@ export class ToDoTableComponent {
       this.tarefaService.deleteTarefa(id).subscribe(() => {
         this.tarefas = this.tarefas.filter(tarefa => tarefa.id !== id);
       });
+
+     this.toastr.success('Tarefa deletada com sucesso!');
     }
   }
 
