@@ -55,7 +55,7 @@
             </tr>
 
             <tr *ngFor="let tarefa of tarefas; let i = index">
-                <td *ngIf="!editTask || editIndex !== i">{{ tarefa.titulo }}</td>
+                <td *ngIf="!editTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.titulo">{{ tarefa.titulo }}</td>
                 <td *ngIf="editTask && editIndex === i">
                     <input type="text" [formControl]="getFormControl('titulo')" class="form-control"
                         [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'titulo') }">
@@ -63,7 +63,7 @@
                         Campo obrigatório.
                     </div>
                 </td>
-                <td *ngIf="!editTask || editIndex !== i">{{ tarefa.descricao }}</td>
+                <td *ngIf="!editTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.descricao">{{ tarefa.descricao }}</td>
                 <td *ngIf="editTask && editIndex === i">
                     <input type="text" [formControl]="getFormControl('descricao')" class="form-control"
                         [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'descricao') }">
