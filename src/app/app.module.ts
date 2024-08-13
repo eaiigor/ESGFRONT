@@ -8,6 +8,7 @@ import { ToDoTableComponent } from './components/to-do-table/to-do-table.compone
 import { PostItWallComponent } from './components/post-it-wall/post-it-wall.component';
 import { TodayDateComponent } from './components/today-date/today-date.component';
 import { MainComponent } from './pages/main/main.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MainComponent } from './pages/main/main.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -21,7 +21,7 @@ export class MainComponent implements OnInit {
     });
   }
 
-  addTarefa() {
+  /* addTarefa() {
     const novaTarefa: Tarefa = {
       titulo: 'Nova Tarefa',
       descricao: 'Descrição da nova tarefa',
@@ -32,5 +32,5 @@ export class MainComponent implements OnInit {
     this.tarefaService.addTarefa(novaTarefa).subscribe(() => {
       this.getTarefas();
     });
-  }
+  } */
 }

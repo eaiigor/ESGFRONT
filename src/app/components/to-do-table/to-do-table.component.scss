@@ -1,0 +1,112 @@
+.mt-6 {
+    margin-top: 6rem;
+}
+
+.custom-add-btn {
+    border: none;
+    background-color: #ebffed;
+    border-radius: 16px;
+    transition: all 0.3s ease-in-out;
+
+    i {
+        font-size: 28px;
+        color: #3cab18;
+        transition: all 0.3s ease-in-out;
+    }
+}
+
+.custom-add-btn:hover {
+    background-color: #66dd72;
+
+    i {
+        color: #ffffff;
+    }
+}
+
+.table-responsive {
+    table {
+        width: 100%;
+
+        thead {
+            background-color: #007bff;
+            color: white;
+
+            tr th {
+                font-size: 20px;
+                padding: .5rem;
+            }
+
+            /* .pdl-1 {
+                padding-left: 1rem !important;
+            }
+
+            .pdr-1 {
+                padding-right: 1rem !important;
+            } */
+        }
+
+        tbody tr td {
+            padding: 20px .5rem;
+            background-color: rgba(0, 123, 255, 0);
+            border-bottom: none;
+
+            i {
+                margin-right: 3px;
+            }
+        }
+
+        tbody tr {
+            transition: all 0.3s ease-in-out;
+        }
+
+        tbody tr:hover {
+            background-color: #e6e6e6;
+        }
+
+        .status-pendente {
+            display: inline-block;
+            background: #fa8602;
+            min-width: 8.7rem;
+            border-radius: 8px;
+            text-align: center;
+            padding: 2px 14px;
+            color: #fff;
+        }
+
+        .status-andamento {
+            display: inline-block;
+            background: #008cff;
+            min-width: 8.7rem;
+            border-radius: 8px;
+            text-align: center;
+            padding: 2px 14px;
+            color: #fff;
+        }
+
+        .status-concluido {
+            display: inline-block;
+            background: #28bd03;
+            min-width: 8.7rem;
+            border-radius: 8px;
+            text-align: center;
+            padding: 2px 14px;
+            color: #fff;
+        }
+
+        .btn {
+            min-width: 5.6rem;
+        }
+
+        .ml-05 {
+            margin-left: 0.5rem;
+        }
+
+        .form-control {
+            width: 90%;
+        }
+
+        .wk-center {
+            text-align: -webkit-center;
+        }
+    }
+}

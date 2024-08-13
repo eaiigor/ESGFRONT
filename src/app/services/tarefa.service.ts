@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Tarefa {
-  id?: number;
+  id: number;
   titulo: string;
   descricao: string;
   dataVencimento: string;
@@ -15,7 +15,7 @@ export interface Tarefa {
 })
 export class TarefaService {
 
-  private apiUrl = 'https://localhost:7160/api/Tarefas';
+  private apiUrl = 'https://localhost:5000/api/Tarefas';
 
   constructor(private http: HttpClient) { }
 
