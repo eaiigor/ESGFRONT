@@ -73,7 +73,6 @@ export class ToDoTableComponent {
   }
 
   onSaveNewTask(): void {
-    debugger
     if (this.newTaskForm.valid) {
       const newTask: Tarefa = this.newTaskForm.value;
       this.tarefaService.addTarefa(newTask).subscribe((tarefa) => {
@@ -110,7 +109,7 @@ export class ToDoTableComponent {
         this.editIndex = null;
       });
 
-     this.toastr.success('Tarefa atualizada com sucesso!');
+      this.toastr.success('Tarefa atualizada com sucesso!');
     }
   }
 
@@ -125,7 +124,7 @@ export class ToDoTableComponent {
         this.tarefas = this.tarefas.filter(tarefa => tarefa.id !== id);
       });
 
-     this.toastr.success('Tarefa deletada com sucesso!');
+      this.toastr.success('Tarefa deletada com sucesso!');
     }
   }
 
