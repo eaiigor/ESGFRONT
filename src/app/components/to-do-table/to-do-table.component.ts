@@ -1,45 +1,66 @@
-import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Tarefa, TarefaService } from 'src/app/services/tarefa.service';
+import { Tarefa } from 'src/app/models/tarefa';
+import { TarefaService } from 'src/app/services/tarefa.service';
+import { EStatusTarefa } from '../enums/EStatusTarefa';
 
 @Component({
   selector: 'app-to-do-table',
   templateUrl: './to-do-table.component.html',
   styleUrls: ['./to-do-table.component.scss']
 })
-export class ToDoTableComponent {
+export class ToDoTableComponent implements OnInit {
   @Input() tarefas: Tarefa[] = [];
+
   isAddingTask = false;
+
   editTask = false;
+
   editIndex: number | null = null;
-  newTaskForm: FormGroup;
-  editTaskForm: FormGroup;
+  
+  newTaskForm!: FormGroup;
+  
+  editTaskForm!: FormGroup;
 
-  constructor(private tarefaService: TarefaService, private fb: FormBuilder, private toastr: ToastrService) {
-    this.newTaskForm = this.fb.group({
-      titulo: ['', Validators.required],
-      descricao: ['', Validators.required],
-      dataVencimento: ['', Validators.required],
-      status: [1, Validators.required]
-    });
+  statusTarefaEnum = EStatusTarefa;
 
-    this.editTaskForm = this.fb.group({
-      titulo: ['', Validators.required],
-      descricao: ['', Validators.required],
-      dataVencimento: ['', Validators.required],
-      status: [1, Validators.required]
-    });
+  constructor(private tarefaService: TarefaService, private toastr: ToastrService) { }
+
+  ngOnInit(): void {
+    this.createForm();
+    this.editForm();
+  }
+
+  createForm(): void {
+    this.newTaskForm = new FormGroup({
+      titulo: new FormControl('', Validators.required),
+      descricao: new FormControl('', Validators.required),
+      dataVencimento: new FormControl('', Validators.required),
+      status: new FormControl(1, Validators.required)
+    })
+  }
+
+  editForm(): void {
+    this.editTaskForm = new FormGroup({
+      titulo: new FormControl('', Validators.required),
+      descricao: new FormControl('', Validators.required),
+      dataVencimento: new FormControl('', Validators.required),
+      status: new FormControl(1, Validators.required)
+    })
   }
 
   getStatusText(status: number): string {
     switch (status) {
-      case 1:
+      case EStatusTarefa.Pendente:
         return 'Pendente';
-      case 2:
+
+      case EStatusTarefa.EmAndamento:
         return 'Em andamento';
-      case 3:
+
+      case EStatusTarefa.Concluido:
         return 'Concluído';
+
       default:
         return 'Desconhecido';
     }
@@ -47,12 +68,15 @@ export class ToDoTableComponent {
 
   getStatusClass(status: number): string {
     switch (status) {
-      case 1:
+      case EStatusTarefa.Pendente:
         return 'status-pendente';
-      case 2:
+
+      case EStatusTarefa.EmAndamento:
         return 'status-andamento';
-      case 3:
+
+      case EStatusTarefa.Concluido:
         return 'status-concluido';
+
       default:
         return '';
     }
@@ -64,6 +88,29 @@ export class ToDoTableComponent {
 
   onCancelNewTask(): void {
     this.isAddingTask = false;
+    this.resetNewTaskForm();
+  }
+
+  onSaveNewTask(): void {
+    if (this.newTaskForm.invalid) {
+      return;
+    }
+
+    const newTask: Tarefa = this.newTaskForm.value;
+
+    this.tarefaService.addTarefa(newTask).subscribe((tarefa) => {
+
+      this.tarefas.push(tarefa);
+
+      this.isAddingTask = false;
+
+      this.resetNewTaskForm();
+
+      this.toastr.success('Tarefa criada com sucesso!');
+    });
+  }
+
+  resetNewTaskForm(): void {
     this.newTaskForm.reset({
       titulo: '',
       descricao: '',
@@ -72,26 +119,11 @@ export class ToDoTableComponent {
     });
   }
 
-  onSaveNewTask(): void {
-    if (this.newTaskForm.valid) {
-      const newTask: Tarefa = this.newTaskForm.value;
-      this.tarefaService.addTarefa(newTask).subscribe((tarefa) => {
-        this.tarefas.push(tarefa);
-        this.toastr.success('Tarefa criada com sucesso!');
-        this.isAddingTask = false;
-        this.newTaskForm.reset({
-          titulo: '',
-          descricao: '',
-          dataVencimento: '',
-          status: 1
-        });
-      });
-    }
-  }
-
   onEdit(index: number, tarefa: Tarefa): void {
     this.editIndex = index;
+
     this.editTask = true;
+
     this.editTaskForm.setValue({
       titulo: tarefa.titulo,
       descricao: tarefa.descricao,
@@ -101,16 +133,21 @@ export class ToDoTableComponent {
   }
 
   onUpdateTask(index: number): void {
-    if (this.editTaskForm.valid) {
-      const updatedTask: Tarefa = { ...this.editTaskForm.value, id: this.tarefas[index].id };
-      this.tarefaService.updateTarefa(updatedTask).subscribe((tarefa) => {
-        this.tarefas[index] = tarefa;
-        this.editTask = false;
-        this.editIndex = null;
-      });
+    if (this.editTaskForm.invalid) {
+      return;
+    }
+
+    const updatedTask: Tarefa = { ...this.editTaskForm.value, id: this.tarefas[index].id };
+
+    this.tarefaService.updateTarefa(updatedTask).subscribe((tarefa) => {
+      this.tarefas[index] = tarefa;
+
+      this.editTask = false;
+      
+      this.editIndex = null;
 
       this.toastr.success('Tarefa atualizada com sucesso!');
-    }
+    });
   }
 
   onCancelEdit(): void {
@@ -130,11 +167,12 @@ export class ToDoTableComponent {
 
   getFormControl(controlName: string): FormControl {
     const control = this.editTaskForm.get(controlName);
+
     if (control instanceof FormControl) {
       return control;
-    } else {
-      throw new Error(`FormControl '${controlName}' not found or is not an instance of FormControl.`);
     }
+
+    throw new Error(`FormControl '${controlName}' not found or is not an instance of FormControl.`);
   }
 
   isFieldInvalid(form: FormGroup, field: string) {

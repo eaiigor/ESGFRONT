@@ -40,9 +40,9 @@
                 <td class="wk-center">
                     <select formControlName="status" class="form-control"
                         [ngClass]="{ 'is-invalid': isFieldInvalid(newTaskForm, 'status') }">
-                        <option [value]="1">Pendente</option>
-                        <option [value]="2">Em andamento</option>
-                        <option [value]="3">Concluído</option>
+                        <option [value]="statusTarefaEnum.Pendente">Pendente</option>
+                        <option [value]="statusTarefaEnum.EmAndamento">Em andamento</option>
+                        <option [value]="statusTarefaEnum.Concluido">Concluído</option>
                     </select>
                     <div *ngIf="isFieldInvalid(newTaskForm, 'status')" class="text-danger">
                         Campo obrigatório.
@@ -87,9 +87,9 @@
                 <td *ngIf="editTask && editIndex === i">
                     <select [formControl]="getFormControl('status')" class="form-control"
                         [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'status') }">
-                        <option [value]="1">Pendente</option>
-                        <option [value]="2">Em andamento</option>
-                        <option [value]="3">Concluído</option>
+                        <option [value]="statusTarefaEnum.Pendente">Pendente</option>
+                        <option [value]="statusTarefaEnum.EmAndamento">Em andamento</option>
+                        <option [value]="statusTarefaEnum.Concluido">Concluído</option>
                     </select>
                     <div *ngIf="isFieldInvalid(editTaskForm, 'status')" class="text-danger">
                         Campo obrigatório.

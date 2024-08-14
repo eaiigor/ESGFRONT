@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Tarefa, TarefaService } from 'src/app/services/tarefa.service';
+import { Tarefa } from 'src/app/models/tarefa';
+import { TarefaService } from 'src/app/services/tarefa.service';
 
 @Component({
   selector: 'app-main',
@@ -11,26 +12,13 @@ export class MainComponent implements OnInit {
 
   constructor(private tarefaService: TarefaService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getTarefas();
   }
 
-  getTarefas() {
+  getTarefas(): void {
     this.tarefaService.getTarefas().subscribe((data: Tarefa[]) => {
       this.tarefas = data;
     });
   }
-
-  /* addTarefa() {
-    const novaTarefa: Tarefa = {
-      titulo: 'Nova Tarefa',
-      descricao: 'Descrição da nova tarefa',
-      dataVencimento: '2024-08-20T00:00:00',
-      status: 5
-    };
-
-    this.tarefaService.addTarefa(novaTarefa).subscribe(() => {
-      this.getTarefas();
-    });
-  } */
 }

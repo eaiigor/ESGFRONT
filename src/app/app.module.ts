@@ -1,22 +1,24 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToDoTableComponent } from './components/to-do-table/to-do-table.component';
-import { PostItWallComponent } from './components/post-it-wall/post-it-wall.component';
 import { TodayDateComponent } from './components/today-date/today-date.component';
 import { MainComponent } from './pages/main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { registerLocaleData } from '@angular/common';
+import localeBr from '@angular/common/locales/pt';
+
+registerLocaleData(localeBr, 'pt')
 
 @NgModule({
   declarations: [
     AppComponent,
     ToDoTableComponent,
-    PostItWallComponent,
     TodayDateComponent,
     MainComponent
   ],
@@ -28,7 +30,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
