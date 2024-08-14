@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import localeBr from '@angular/common/locales/pt';
+import { ToDoCardsComponent } from './components/to-do-cards/to-do-cards.component';
 
 registerLocaleData(localeBr, 'pt')
 
@@ -20,7 +21,8 @@ registerLocaleData(localeBr, 'pt')
     AppComponent,
     ToDoTableComponent,
     TodayDateComponent,
-    MainComponent
+    MainComponent,
+    ToDoCardsComponent,
   ],
   imports: [
     BrowserModule,

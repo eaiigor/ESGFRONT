@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { Tarefa } from 'src/app/models/tarefa';
 import { TarefaService } from 'src/app/services/tarefa.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-main',
@@ -10,10 +12,21 @@ import { TarefaService } from 'src/app/services/tarefa.service';
 export class MainComponent implements OnInit {
   tarefas: Tarefa[] = [];
 
-  constructor(private tarefaService: TarefaService) {}
+  isMobile$!: Observable<boolean>;
+
+  constructor(private tarefaService: TarefaService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.getTarefas();
+
+    this.verifyView();
+  }
+
+  verifyView(): void {
+    this.isMobile$ = this.breakpointObserver.observe([Breakpoints.Handset])
+      .pipe(
+        map(result => result.matches)
+      );
   }
 
   getTarefas(): void {

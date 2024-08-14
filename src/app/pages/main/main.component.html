@@ -1,4 +1,9 @@
 <div class="container py-5">
     <app-today-date></app-today-date>
-    <app-to-do-table [tarefas]="tarefas"></app-to-do-table>
-</div>
+    <ng-container *ngIf="isMobile$ | async; else desktopView">
+      <app-to-do-cards [tarefas]="tarefas"></app-to-do-cards>
+    </ng-container>
+    <ng-template #desktopView>
+      <app-to-do-table [tarefas]="tarefas"></app-to-do-table>
+    </ng-template>
+  </div>
