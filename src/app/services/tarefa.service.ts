@@ -8,7 +8,7 @@ import { Tarefa } from '../models/tarefa';
 })
 export class TarefaService {
 
-  private apiUrl = 'https://localhost:5000/api/Tarefas';
+  private apiUrl = 'https://esgendpoints-15d5022e26aa.herokuapp.com/api/Tarefas';
 
   constructor(private http: HttpClient) { }
 
