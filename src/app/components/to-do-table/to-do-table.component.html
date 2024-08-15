@@ -1,7 +1,3 @@
-<div class="d-flex justify-content-end mt-6">
-    <button class="custom-add-btn w-100" (click)="onAddNewTask()"><i class="mdi mdi-plus"></i></button>
-</div>
-
 <div class="table-responsive mt-4">
     <table class="table table-striped">
         <thead>
@@ -15,36 +11,36 @@
         </thead>
 
         <tbody>
-            <tr *ngIf="isAddingTask" [formGroup]="newTaskForm">
+            <tr *ngIf="isAddingTask" [formGroup]="formGroup">
                 <td>
                     <input type="text" formControlName="titulo" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(newTaskForm, 'titulo') }">
-                    <div *ngIf="isFieldInvalid(newTaskForm, 'titulo')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'titulo') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'titulo')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
                 <td>
                     <input type="text" formControlName="descricao" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(newTaskForm, 'descricao') }">
-                    <div *ngIf="isFieldInvalid(newTaskForm, 'descricao')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'descricao') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'descricao')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
                 <td>
                     <input type="date" formControlName="dataVencimento" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(newTaskForm, 'dataVencimento') }">
-                    <div *ngIf="isFieldInvalid(newTaskForm, 'dataVencimento')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'dataVencimento') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'dataVencimento')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
                 <td class="wk-center">
                     <select formControlName="status" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(newTaskForm, 'status') }">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'status') }">
                         <option [value]="statusTarefaEnum.Pendente">Pendente</option>
                         <option [value]="statusTarefaEnum.EmAndamento">Em andamento</option>
                         <option [value]="statusTarefaEnum.Concluido">Concluído</option>
                     </select>
-                    <div *ngIf="isFieldInvalid(newTaskForm, 'status')" class="text-danger">
+                    <div *ngIf="isFieldInvalid(formGroup, 'status')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
@@ -55,51 +51,51 @@
             </tr>
 
             <tr *ngFor="let tarefa of tarefas; let i = index">
-                <td *ngIf="!editTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.titulo">{{ tarefa.titulo }}</td>
-                <td *ngIf="editTask && editIndex === i">
+                <td *ngIf="!editingTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.titulo">{{ tarefa.titulo }}</td>
+                <td *ngIf="editingTask && editIndex === i">
                     <input type="text" [formControl]="getFormControl('titulo')" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'titulo') }">
-                    <div *ngIf="isFieldInvalid(editTaskForm, 'titulo')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'titulo') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'titulo')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
-                <td *ngIf="!editTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.descricao">{{ tarefa.descricao }}</td>
-                <td *ngIf="editTask && editIndex === i">
+                <td *ngIf="!editingTask || editIndex !== i" class="text-truncate" [attr.title]="tarefa.descricao">{{ tarefa.descricao }}</td>
+                <td *ngIf="editingTask && editIndex === i">
                     <input type="text" [formControl]="getFormControl('descricao')" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'descricao') }">
-                    <div *ngIf="isFieldInvalid(editTaskForm, 'descricao')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'descricao') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'descricao')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
-                <td *ngIf="!editTask || editIndex !== i">{{ tarefa.dataVencimento | date: 'dd/MM/yyyy' }}</td>
-                <td *ngIf="editTask && editIndex === i">
+                <td *ngIf="!editingTask || editIndex !== i">{{ tarefa.dataVencimento | date: 'dd/MM/yyyy' }}</td>
+                <td *ngIf="editingTask && editIndex === i">
                     <input type="date" [formControl]="getFormControl('dataVencimento')" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'dataVencimento') }">
-                    <div *ngIf="isFieldInvalid(editTaskForm, 'dataVencimento')" class="text-danger">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'dataVencimento') }">
+                    <div *ngIf="isFieldInvalid(formGroup, 'dataVencimento')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
-                <td class="text-center" *ngIf="!editTask || editIndex !== i">
+                <td class="text-center" *ngIf="!editingTask || editIndex !== i">
                     <label [ngClass]="getStatusClass(tarefa.status)">
                         {{ getStatusText(tarefa.status) }}
                     </label>
                 </td>
-                <td *ngIf="editTask && editIndex === i">
+                <td *ngIf="editingTask && editIndex === i">
                     <select [formControl]="getFormControl('status')" class="form-control"
-                        [ngClass]="{ 'is-invalid': isFieldInvalid(editTaskForm, 'status') }">
+                        [ngClass]="{ 'is-invalid': isFieldInvalid(formGroup, 'status') }">
                         <option [value]="statusTarefaEnum.Pendente">Pendente</option>
                         <option [value]="statusTarefaEnum.EmAndamento">Em andamento</option>
                         <option [value]="statusTarefaEnum.Concluido">Concluído</option>
                     </select>
-                    <div *ngIf="isFieldInvalid(editTaskForm, 'status')" class="text-danger">
+                    <div *ngIf="isFieldInvalid(formGroup, 'status')" class="text-danger">
                         Campo obrigatório.
                     </div>
                 </td>
                 <td class="text-end">
-                    <button *ngIf="!editTask || editIndex !== i" class="btn btn-primary btn-sm" (click)="onEdit(i, tarefa)"><i class="mdi mdi-pencil-outline"></i>Editar</button>
-                    <button *ngIf="editTask && editIndex === i" class="btn btn-success btn-sm" (click)="onUpdateTask(i)"><i class="mdi mdi-check-outline"></i>Confirmar</button>
-                    <button *ngIf="editTask && editIndex === i" class="btn btn-secondary btn-sm ml-05" (click)="onCancelEdit()"><i class="mdi mdi-close-outline"></i>Cancelar</button>
-                    <button *ngIf="!editTask || editIndex !== i" class="btn btn-danger btn-sm ml-05" (click)="onDelete(tarefa.id)"><i class="mdi mdi-delete-outline"></i>Deletar</button>
+                    <button *ngIf="!editingTask || editIndex !== i" class="btn btn-primary btn-sm" (click)="onEdit(i, tarefa)"><i class="mdi mdi-pencil-outline"></i>Editar</button>
+                    <button *ngIf="editingTask && editIndex === i" class="btn btn-success btn-sm" (click)="onUpdateTask(i)"><i class="mdi mdi-check-outline"></i>Confirmar</button>
+                    <button *ngIf="editingTask && editIndex === i" class="btn btn-secondary btn-sm ml-05" (click)="onCancelEdit()"><i class="mdi mdi-close-outline"></i>Cancelar</button>
+                    <button *ngIf="!editingTask || editIndex !== i" class="btn btn-danger btn-sm ml-05" (click)="onDelete(tarefa.id)"><i class="mdi mdi-delete-outline"></i>Deletar</button>
                 </td>
             </tr>
 

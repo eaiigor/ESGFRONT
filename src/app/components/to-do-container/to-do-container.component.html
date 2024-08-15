@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-end mt-5">
+  <button class="custom-add-btn w-100" (click)="addNewTask()"><i class="mdi mdi-plus"></i></button>
+</div>
+<ng-container *ngIf="isMobile$ | async; else desktopView">
+  <app-to-do-cards
+    [tarefas]="tarefas"
+    [isAddingTask]="isAddingTask"
+    [editingTask]="editingTask"
+    [editIndex]="editIndex"
+    [formGroup]="formGroup"
+    [statusText]="statusTextMap"
+    [statusClass]="statusClassMap"
+    [statusClassContent]="statusClassContentMap"
+    [statusClassTitle]="statusClassTitleMap"
+    (cancelNewTask)="cancelNewTask()"
+    (saveNewTask)="saveNewTask()"
+    (editTask)="editTask($event)"
+    (cancelEdit)="cancelEdit()"
+    (deleteTask)="deleteTask($event)"
+    (updateTask)="updateTask($event)"
+  ></app-to-do-cards>
+</ng-container>
+<ng-template #desktopView>
+  <app-to-do-table
+    [tarefas]="tarefas"
+    [isAddingTask]="isAddingTask"
+    [editingTask]="editingTask"
+    [editIndex]="editIndex"
+    [formGroup]="formGroup"
+    [statusText]="statusTextMap"
+    [statusClass]="statusClassMap"
+    (cancelNewTask)="cancelNewTask()"
+    (saveNewTask)="saveNewTask()"
+    (editTask)="editTask($event)"
+    (cancelEdit)="cancelEdit()"
+    (deleteTask)="deleteTask($event)"
+    (updateTask)="updateTask($event)"
+  ></app-to-do-table>
+</ng-template>

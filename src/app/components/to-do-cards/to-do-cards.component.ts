@@ -1,205 +1,72 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Tarefa } from 'src/app/models/tarefa';
 import { EStatusTarefa } from '../enums/EStatusTarefa';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TarefaService } from 'src/app/services/tarefa.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-to-do-cards',
   templateUrl: './to-do-cards.component.html',
-  styleUrls: ['./to-do-cards.component.scss']
+  styleUrls: ['./to-do-cards.component.scss'],
 })
-export class ToDoCardsComponent implements OnInit {
-
+export class ToDoCardsComponent {
   @Input() tarefas: Tarefa[] = [];
 
-  isAddingTask = false;
+  @Input() isAddingTask = false;
 
-  editTask = false;
+  @Input() editingTask = false;
 
-  editIndex: number | null = null;
-  
-  newTaskForm!: FormGroup;
-  
-  editTaskForm!: FormGroup;
+  @Input() editIndex: number | null = null;
 
-  statusTarefaEnum = EStatusTarefa;
+  @Input() formGroup!: FormGroup;
 
-  constructor(private tarefaService: TarefaService, private toastr: ToastrService) { }
+  @Input() statusText = new Map<EStatusTarefa, string>();
 
-  ngOnInit(): void {
-    this.createForm();
-    this.editForm();
-  }
+  @Input() statusClass = new Map<EStatusTarefa, string>();
 
-  createForm(): void {
-    this.newTaskForm = new FormGroup({
-      titulo: new FormControl('', Validators.required),
-      descricao: new FormControl('', Validators.required),
-      dataVencimento: new FormControl('', Validators.required),
-      status: new FormControl(1, Validators.required)
-    })
-  }
+  @Input() statusClassTitle = new Map<EStatusTarefa, string>();
 
-  editForm(): void {
-    this.editTaskForm = new FormGroup({
-      titulo: new FormControl('', Validators.required),
-      descricao: new FormControl('', Validators.required),
-      dataVencimento: new FormControl('', Validators.required),
-      status: new FormControl(1, Validators.required)
-    })
-  }
+  @Input() statusClassContent = new Map<EStatusTarefa, string>();
 
-  getStatusText(status: number): string {
-    switch (status) {
-      case EStatusTarefa.Pendente:
-        return 'Pendente';
+  @Output() cancelNewTask = new EventEmitter<void>();
 
-      case EStatusTarefa.EmAndamento:
-        return 'Em andamento';
+  @Output() saveNewTask = new EventEmitter<void>();
 
-      case EStatusTarefa.Concluido:
-        return 'Concluído';
+  @Output() editTask = new EventEmitter<{ index: number; tarefa: Tarefa }>();
 
-      default:
-        return 'Desconhecido';
-    }
-  }
+  @Output() cancelEdit = new EventEmitter<void>();
 
-  getStatusClass(status: number): string {
-    switch (status) {
-      case EStatusTarefa.Pendente:
-        return 'status-pendente';
+  @Output() deleteTask = new EventEmitter<number>();
 
-      case EStatusTarefa.EmAndamento:
-        return 'status-andamento';
+  @Output() updateTask = new EventEmitter<number>();
 
-      case EStatusTarefa.Concluido:
-        return 'status-concluido';
-
-      default:
-        return '';
-    }
-  }
-
-  getStatusClassTitle(status: number): string {
-    switch (status) {
-      case EStatusTarefa.Pendente:
-        return 'card-title-pendente';
-
-      case EStatusTarefa.EmAndamento:
-        return 'card-title-andamento';
-
-      case EStatusTarefa.Concluido:
-        return 'card-title-concluido';
-
-      default:
-        return '';
-    }
-  }
-
-  getStatusClassContent(status: number): string {
-    switch (status) {
-      case EStatusTarefa.Pendente:
-        return 'card-content-pendente';
-
-      case EStatusTarefa.EmAndamento:
-        return 'card-content-andamento';
-
-      case EStatusTarefa.Concluido:
-        return 'card-content-concluido';
-
-      default:
-        return '';
-    }
-  }
-
-  onAddNewTask(): void {
-    this.isAddingTask = true;
-  }
+  constructor() {}
 
   onCancelNewTask(): void {
-    this.isAddingTask = false;
-    this.resetNewTaskForm();
+    this.cancelNewTask.emit();
   }
 
   onSaveNewTask(): void {
-    if (this.newTaskForm.invalid) {
-      return;
-    }
-
-    const newTask: Tarefa = this.newTaskForm.value;
-
-    this.tarefaService.addTarefa(newTask).subscribe((tarefa) => {
-
-      this.tarefas.push(tarefa);
-
-      this.isAddingTask = false;
-
-      this.resetNewTaskForm();
-
-      this.toastr.success('Tarefa criada com sucesso!');
-    });
-  }
-
-  resetNewTaskForm(): void {
-    this.newTaskForm.reset({
-      titulo: '',
-      descricao: '',
-      dataVencimento: '',
-      status: 1
-    });
+    this.saveNewTask.emit();
   }
 
   onEdit(index: number, tarefa: Tarefa): void {
-    this.editIndex = index;
-
-    this.editTask = true;
-
-    this.editTaskForm.setValue({
-      titulo: tarefa.titulo,
-      descricao: tarefa.descricao,
-      dataVencimento: tarefa.dataVencimento,
-      status: tarefa.status
-    });
-  }
-
-  onUpdateTask(index: number): void {
-    if (this.editTaskForm.invalid) {
-      return;
-    }
-
-    const updatedTask: Tarefa = { ...this.editTaskForm.value, id: this.tarefas[index].id };
-
-    this.tarefaService.updateTarefa(updatedTask).subscribe((tarefa) => {
-      this.tarefas[index] = tarefa;
-
-      this.editTask = false;
-      
-      this.editIndex = null;
-
-      this.toastr.success('Tarefa atualizada com sucesso!');
-    });
+    this.editTask.emit({ index, tarefa });
   }
 
   onCancelEdit(): void {
-    this.editTask = false;
-    this.editIndex = null;
+    this.cancelEdit.emit();
   }
 
   onDelete(id: number): void {
-    if (confirm('Tem certeza que deseja deletar esta tarefa?')) {
-      this.tarefaService.deleteTarefa(id).subscribe(() => {
-        this.tarefas = this.tarefas.filter(tarefa => tarefa.id !== id);
-      });
+    this.deleteTask.emit(id);
+  }
 
-      this.toastr.success('Tarefa deletada com sucesso!');
-    }
+  onUpdateTask(index: number): void {
+    this.updateTask.emit(index);
   }
 
   getFormControl(controlName: string): FormControl {
-    const control = this.editTaskForm.get(controlName);
+    const control = this.formGroup.get(controlName);
 
     if (control instanceof FormControl) {
       return control;
@@ -207,10 +74,4 @@ export class ToDoCardsComponent implements OnInit {
 
     throw new Error(`FormControl '${controlName}' not found or is not an instance of FormControl.`);
   }
-
-  isFieldInvalid(form: FormGroup, field: string) {
-    const formControl = form.get(field);
-    return formControl?.invalid && formControl?.touched;
-  }
-
 }

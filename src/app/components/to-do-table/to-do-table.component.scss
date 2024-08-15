@@ -2,28 +2,6 @@
     margin-top: 6rem;
 }
 
-.custom-add-btn {
-    border: none;
-    background-color: #ebffed;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-
-    i {
-        font-size: 28px;
-        color: #3cab18;
-        transition: all 0.3s ease-in-out;
-    }
-}
-
-.custom-add-btn:hover {
-    background-color: #66dd72;
-
-    i {
-        color: #ffffff;
-    }
-}
-
 .table-responsive {
     table {
         width: 100%;
