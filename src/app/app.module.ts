@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeBr from '@angular/common/locales/pt';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +34,7 @@ registerLocaleData(localeBr, 'pt');
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    FormsModule,
     ToastrModule.forRoot(),
   ],
   providers: [
@@ -42,4 +43,4 @@ registerLocaleData(localeBr, 'pt');
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

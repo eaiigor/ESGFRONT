@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tarefa } from '../models/tarefa';
+import { EStatusTarefa } from '../components/enums/EStatusTarefa';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,12 @@ export class TarefaService {
 
   constructor(private http: HttpClient) { }
 
-  getTarefas(): Observable<Tarefa[]> {
-    return this.http.get<Tarefa[]>(this.apiUrl);
+  getTarefas(status?: EStatusTarefa): Observable<Tarefa[]> {
+    let params = { 'status': status || '' }
+
+    return this.http.get<Tarefa[]>(this.apiUrl, {
+      params
+    });
   }
 
   addTarefa(tarefa: Tarefa): Observable<Tarefa> {

@@ -1,4 +1,7 @@
 <div class="container py-5">
-    <app-today-date></app-today-date>
-    <app-to-do-container [tarefas]="tarefas"></app-to-do-container>
+  <app-today-date></app-today-date>
+  <app-to-do-container
+    [tarefas]="(tarefas$ | async) || []"
+    (selectedStatusChange)="getTarefas($event)"
+  ></app-to-do-container>
 </div>

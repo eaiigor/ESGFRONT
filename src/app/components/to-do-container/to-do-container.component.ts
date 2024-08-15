@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Tarefa } from 'src/app/models/tarefa';
 import { EStatusTarefa } from '../enums/EStatusTarefa';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -16,6 +16,12 @@ import { DatePipe } from '@angular/common';
 export class ToDoContainerComponent implements OnInit {
   @Input() tarefas: Tarefa[] = [];
 
+  @Output() selectedStatusChange = new EventEmitter<EStatusTarefa>();
+
+  status: EStatusTarefa = EStatusTarefa.All;
+
+  statusTarefaEnum = EStatusTarefa;
+
   isAddingTask = false;
 
   editingTask = false;
@@ -31,7 +37,7 @@ export class ToDoContainerComponent implements OnInit {
     private toastr: ToastrService,
     private breakpointObserver: BreakpointObserver,
     private datePipe: DatePipe,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -145,6 +151,8 @@ export class ToDoContainerComponent implements OnInit {
       this.editingTask = false;
 
       this.editIndex = null;
+      
+      this.tarefas = this.tarefas.filter((tarefa: Tarefa) => this.status === EStatusTarefa.All || Number(this.status) === tarefa.status);
 
       this.toastr.success('Tarefa atualizada com sucesso!');
     });

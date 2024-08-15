@@ -1,4 +1,10 @@
-<div class="d-flex justify-content-end mt-5">
+<div class="d-flex justify-content-end mt-5 gap-2">
+  <select [(ngModel)]="status" class="form-control w-auto" (ngModelChange)="selectedStatusChange.emit($event)">
+    <option [value]="statusTarefaEnum.All">Todos</option>
+    <option [value]="statusTarefaEnum.Pendente">Pendente</option>
+    <option [value]="statusTarefaEnum.EmAndamento">Em andamento</option>
+    <option [value]="statusTarefaEnum.Concluido">Concluído</option>
+  </select>
   <button class="custom-add-btn w-100" (click)="addNewTask()"><i class="mdi mdi-plus"></i></button>
 </div>
 <ng-container *ngIf="isMobile$ | async; else desktopView">
